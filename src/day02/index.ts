@@ -17,11 +17,11 @@ const parseInput = (rawInput: string) => {
 
 const rateChoice = (choice: string): number => {
   switch (choice) {
-    case "X":
+    case "X" || "A":
       return 1;
-    case "Y":
+    case "Y" || "B":
       return 2;
-    case "Z":
+    case "Z" || "C":
       return 3;
     default:
       return 0;
@@ -89,8 +89,31 @@ const part1 = (rawInput: string) => {
   return roundResults;
 };
 
+const determineStrategy = (round: matchup): number => {
+  switch (round.yourChoice) {
+    case "X":
+      return 0;
+    case "Y":
+      return 3;
+    case "Z":
+      return 6;
+    default:
+      return 0;
+  }
+};
+
 const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
+
+  const roundResults = input
+    .reduce(
+      (acc, round) =>
+        acc + (determineStrategy(round) + rateChoice(round.yourChoice)),
+      0,
+    )
+    .toString();
+
+  return roundResults;
 
   return;
 };
@@ -105,15 +128,15 @@ run({
     ],
     solution: part1,
   },
-  // part2: {
-  //   tests: [
-  //     // {
-  //     //   input: ``,
-  //     //   expected: "",
-  //     // },
-  //   ],
-  //   solution: part2,
-  // },
+  part2: {
+    tests: [
+      {
+        input: `A Y\nB X\nZ A`,
+        expected: "12",
+      },
+    ],
+    solution: part2,
+  },
   trimTestInputs: true,
   onlyTests: false,
 });
